@@ -14,20 +14,26 @@
            :equal-route))
 (in-package :myway.route)
 
-(defstruct (route (:constructor %make-route))
-  name
-  rule
-  handler)
+(defclass route ()
+  ((name :initarg :name
+         :initform nil
+         :accessor route-name)
+   (rule :initarg :rule
+         :accessor route-rule)
+   (handler :initarg :handler
+            :accessor route-handler)))
 
 (defun make-route (url &key (method '(:GET)) regexp name handler)
-  (%make-route :name name
-               :rule (make-rule url :method method :regexp regexp)
-               :handler handler))
+  (make-instance 'route
+                 :name name
+                 :rule (make-rule url :method method :regexp regexp)
+                 :handler handler))
 
-(defun equal-route (route1 route2)
-  (and (eq (route-name route1) (route-name route2))
-       (equal-rule (route-rule route1) (route-rule route2))))
+(defgeneric equal-route (route1 route2)
+  (:method ((route1 route) (route2 route))
+    (and (eq (route-name route1) (route-name route2))
+         (equal-rule (route-rule route1) (route-rule route2)))))
 
-(defun match-route (route method url-string &key allow-head)
-  (check-type route route)
-  (match-rule (route-rule route) method url-string :allow-head allow-head))
+(defgeneric match-route (route method url-string &key allow-head)
+  (:method ((route route) method url-string &key allow-head)
+    (match-rule (route-rule route) method url-string :allow-head allow-head)))
