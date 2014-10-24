@@ -10,7 +10,8 @@
                 :dispatch)
   (:import-from :myway.route
                 :route
-                :make-route)
+                :make-route
+                :route-handler)
   (:export :make-mapper
            :connect
            :next-route
@@ -19,11 +20,14 @@
            :*env*
            :to-app
 
-           :route
            :mapper
            :add-route
            :find-route
-           :make-route))
+
+           :route
+           :make-route
+           :route-name
+           :route-handler))
 (in-package :myway)
 
 (defun connect (mapper url fn &key (method '(:GET)) regexp name)
@@ -32,11 +36,7 @@
                          :method method
                          :regexp regexp
                          :name name
-                         :handler (typecase fn
-                                    (function fn)
-                                    (T (lambda (params)
-                                         (declare (ignore params))
-                                         fn))))))
+                         :handler fn)))
 
 (defun find-route (mapper url &key (method '(:GET)) regexp name)
   (car

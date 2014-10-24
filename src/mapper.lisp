@@ -56,6 +56,11 @@
                         (when matchp
                           (let ((*next-route-function* (lambda () (dispatch-with-rules routes))))
                             (return
-                              (values (funcall (route-handler route) params) T)))))
+                              (values
+                               (typecase (route-handler route)
+                                 ((or function symbol)
+                                  (funcall (route-handler route) params))
+                                 (T (route-handler route)))
+                               T)))))
                    finally (return (values nil nil)))))
     (dispatch-with-rules (mapper-routes mapper))))
