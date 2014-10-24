@@ -11,7 +11,10 @@
   (:import-from :myway.route
                 :route
                 :make-route
-                :route-handler)
+                :route-name
+                :route-handler
+                :equal-route
+                :match-route)
   (:export :make-mapper
            :connect
            :next-route
@@ -27,7 +30,9 @@
            :route
            :make-route
            :route-name
-           :route-handler))
+           :route-handler
+           :equal-route
+           :match-route))
 (in-package :myway)
 
 (defun connect (mapper url fn &key (method '(:GET)) regexp name)
