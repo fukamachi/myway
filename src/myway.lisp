@@ -11,8 +11,6 @@
   (:import-from :myway.route
                 :route
                 :make-route)
-  (:import-from :myway.util
-                :function-name)
   (:export :make-mapper
            :connect
            :next-route
@@ -28,8 +26,7 @@
            :make-route))
 (in-package :myway)
 
-(defun connect (mapper url fn &key (method '(:GET)) regexp (name (when (functionp fn)
-                                                                   (function-name fn))))
+(defun connect (mapper url fn &key (method '(:GET)) regexp name)
   (add-route mapper
              (make-route url
                          :method method

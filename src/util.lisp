@@ -3,8 +3,7 @@
   (:use :cl)
   (:import-from :cl-utilities
                 :with-collectors)
-  (:export :make-collector
-           :function-name))
+  (:export :make-collector))
 (in-package :myway.util)
 
 (defun make-collector ()
@@ -16,20 +15,3 @@
           (unless (eq data none)
             (buffer data))
           buffer)))))
-
-(defun function-name (fn)
-  (when (symbolp fn)
-    (return-from function-name fn))
-  #+ccl (ccl:function-name fn)
-  #-ccl
-  (multiple-value-bind (lambda closurep name) (function-lambda-expression fn)
-    (declare (ignore closurep))
-    (cond
-      (lambda nil)
-      ((and (listp name)
-            (or (eq (car name) 'labels)
-                (eq (car name) 'flet)))
-       (cadr name))
-      ((and (listp name)
-            (eq (car name) 'lambda)) nil)
-      (T name))))
