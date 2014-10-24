@@ -9,7 +9,6 @@
            :route-name
            :route-rule
            :route-handler
-           :make-route
            :match-route
            :equal-route))
 (in-package :myway.route)
@@ -18,16 +17,14 @@
   ((name :initarg :name
          :initform nil
          :accessor route-name)
-   (rule :initarg :rule
-         :accessor route-rule)
+   (rule :accessor route-rule)
    (handler :initarg :handler
             :accessor route-handler)))
 
-(defun make-route (url &key (method '(:GET)) regexp name handler)
-  (make-instance 'route
-                 :name name
-                 :rule (make-rule url :method method :regexp regexp)
-                 :handler handler))
+(defmethod initialize-instance :after ((route route) &rest initargs &key url method regexp &allow-other-keys)
+  (declare (ignore initargs))
+  (setf (route-rule route)
+        (make-rule url :method method :regexp regexp)))
 
 (defgeneric equal-route (route1 route2)
   (:method ((route1 route) (route2 route))

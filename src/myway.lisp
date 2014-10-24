@@ -10,7 +10,6 @@
                 :dispatch)
   (:import-from :myway.route
                 :route
-                :make-route
                 :route-name
                 :route-handler
                 :equal-route
@@ -28,7 +27,6 @@
            :find-route
 
            :route
-           :make-route
            :route-name
            :route-handler
            :equal-route
@@ -37,19 +35,21 @@
 
 (defun connect (mapper url fn &key (method '(:GET)) regexp name)
   (add-route mapper
-             (make-route url
-                         :method method
-                         :regexp regexp
-                         :name name
-                         :handler fn)))
+             (make-instance 'route
+                            :url url
+                            :method method
+                            :regexp regexp
+                            :name name
+                            :handler fn)))
 
 (defun find-route (mapper url &key (method '(:GET)) regexp name)
   (car
    (member-route mapper
-                 (make-route url
-                             :method method
-                             :regexp regexp
-                             :name name))))
+                 (make-instance 'route
+                                :url url
+                                :method method
+                                :regexp regexp
+                                :name name))))
 
 (defparameter *env* nil)
 
