@@ -19,7 +19,6 @@
   :author "Eitaro Fukamachi"
   :license "LLGPL"
   :depends-on (:cl-ppcre
-               :trivial-types
                :do-urlencode
                :map-set
                :alexandria

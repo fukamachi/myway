@@ -1,8 +1,6 @@
 (in-package :cl-user)
 (defpackage myway.rule
   (:use :cl)
-  (:import-from :trivial-types
-                :proper-list)
   (:import-from :do-urlencode
                 :urlencode)
   (:import-from :map-set
