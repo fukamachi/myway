@@ -14,6 +14,8 @@
                 :route-handler
                 :equal-route
                 :match-route)
+  (:import-from :alexandria
+                :delete-from-plist)
   (:export :make-mapper
            :connect
            :next-route
@@ -42,14 +44,12 @@
                             :name name
                             :handler fn)))
 
-(defun find-route (mapper url &key (method '(:GET)) regexp name)
+(defun find-route (mapper url &rest args &key method regexp name (route-class 'route) &allow-other-keys)
   (car
    (member-route mapper
-                 (make-instance 'route
-                                :url url
-                                :method method
-                                :regexp regexp
-                                :name name))))
+                 (apply #'make-instance route-class
+                        :url url
+                        (delete-from-plist args :route-class)))))
 
 (defparameter *env* nil)
 

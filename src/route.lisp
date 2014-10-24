@@ -21,7 +21,7 @@
    (handler :initarg :handler
             :accessor route-handler)))
 
-(defmethod initialize-instance :after ((route route) &rest initargs &key url method regexp &allow-other-keys)
+(defmethod initialize-instance :after ((route route) &rest initargs &key url (method '(:GET)) regexp &allow-other-keys)
   (declare (ignore initargs))
   (setf (route-rule route)
         (make-rule url :method method :regexp regexp)))
