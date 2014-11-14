@@ -3,6 +3,7 @@
   (:use :cl)
   (:import-from :myway.mapper
                 :mapper
+                :mapper-routes
                 :make-mapper
                 :member-route
                 :add-route
@@ -26,6 +27,7 @@
            :to-app
 
            :mapper
+           :mapper-routes
            :add-route
            :find-route
 
