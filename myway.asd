@@ -19,7 +19,7 @@
   :author "Eitaro Fukamachi"
   :license "LLGPL"
   :depends-on (:cl-ppcre
-               :do-urlencode
+               :quri
                :map-set
                :alexandria
                :cl-utilities)

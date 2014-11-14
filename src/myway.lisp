@@ -13,7 +13,8 @@
                 :route-name
                 :route-handler
                 :equal-route
-                :match-route)
+                :match-route
+                :url-for)
   (:import-from :alexandria
                 :delete-from-plist)
   (:export :make-mapper
@@ -32,7 +33,8 @@
            :route-name
            :route-handler
            :equal-route
-           :match-route))
+           :match-route
+           :url-for))
 (in-package :myway)
 
 (defun connect (mapper url fn &key (method '(:GET)) regexp name)

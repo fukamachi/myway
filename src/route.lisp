@@ -4,13 +4,15 @@
   (:import-from :myway.rule
                 :make-rule
                 :match-rule
-                :equal-rule)
+                :equal-rule
+                :rule-url-for)
   (:export :route
            :route-name
            :route-rule
            :route-handler
            :match-route
-           :equal-route))
+           :equal-route
+           :url-for))
 (in-package :myway.route)
 
 (defclass route ()
@@ -34,3 +36,6 @@
 (defgeneric match-route (route method url-string &key allow-head)
   (:method ((route route) method url-string &key allow-head)
     (match-rule (route-rule route) method url-string :allow-head allow-head)))
+
+(defun url-for (route params)
+  (rule-url-for (route-rule route) params))

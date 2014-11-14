@@ -128,4 +128,12 @@
              '("/test%28bar%29/" nil)
              "escape ()"))
 
+(subtest "url-for"
+  (is (rule-url-for (make-rule "/hello/?:name?") '(:name "Eitaro"))
+      "/hello/Eitaro")
+  (is (rule-url-for (make-rule "/hello/?:name?") nil)
+      "/hello")
+  (is (rule-url-for (make-rule "/hello/?:name?") '(:name "Eitaro Fukamachi"))
+      "/hello/Eitaro%20Fukamachi"))
+
 (finalize)

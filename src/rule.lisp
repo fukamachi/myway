@@ -1,8 +1,8 @@
 (in-package :cl-user)
 (defpackage myway.rule
   (:use :cl)
-  (:import-from :do-urlencode
-                :urlencode)
+  (:import-from :quri
+                :url-encode)
   (:import-from :map-set
                 :map-set
                 :make-map-set
@@ -15,7 +15,8 @@
            :regex-rule
            :make-rule
            :match-rule
-           :equal-rule))
+           :equal-rule
+           :rule-url-for))
 (in-package :myway.rule)
 
 (defun list-to-map-set (elements)
@@ -71,7 +72,7 @@
                  (rule-param-keys rule) names)))
 
 (defun escape-special-char (char)
-  (let ((enc (urlencode (string char))))
+  (let ((enc (url-encode (string char))))
     (cond
       ((string= char " ") (format nil "(?:~A|~A)" enc (escape-special-char #\+)))
       ((string= enc char) (ppcre:quote-meta-chars enc))
@@ -116,3 +117,24 @@
                   (ms-member-p rule2-methods rule))
                 (map-set-index (rule-methods rule1))))
        (string= (rule-url rule1) (rule-url rule2))))
+
+(defgeneric rule-url-for (rule params)
+  (:method ((rule rule) params)
+    (let ((url (apply #'format nil (rule-format-string rule)
+                      (loop for key in (rule-param-keys rule)
+                            if (eq key :splat)
+                              collect (pop (getf params key))
+                            else if (getf params key)
+                                   collect (url-encode (getf params key))
+                                   and do (remf params key)
+                            else
+                              collect ""))))
+      (values
+       (ppcre:regex-replace-all
+        "\\?"
+        (ppcre:regex-replace-all "(.\\?)+$" url "") "")
+       params)))
+  (:method ((rule regex-rule) params)
+    (values (apply #'format (rule-format-string rule)
+                   (getf params :captures))
+            (and (remf params :captures) params))))
