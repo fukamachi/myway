@@ -49,6 +49,7 @@
                             :handler fn)))
 
 (defun find-route (mapper url &rest args &key method regexp name (route-class 'route) &allow-other-keys)
+  (declare (ignore method regexp name))
   (car
    (member-route mapper
                  (apply #'make-instance route-class
