@@ -40,7 +40,7 @@
 (is (dispatch *mapper* "/new" :method :GET) "new")
 
 (is (funcall (to-app *mapper*)
-             '(:method :GET :path-info "/"))
+             '(:request-method :GET :path-info "/"))
     "Hello, World!")
 
 (connect *mapper* "/id/:n"

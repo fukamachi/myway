@@ -61,5 +61,5 @@
 (defun to-app (mapper)
   (lambda (env)
     (let ((*env* env))
-      (destructuring-bind (&key method path-info &allow-other-keys) env
-        (dispatch mapper path-info :method method)))))
+      (destructuring-bind (&key request-method path-info &allow-other-keys) env
+        (dispatch mapper path-info :method request-method)))))
