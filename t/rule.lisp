@@ -38,6 +38,10 @@
 
   (ok (match-rule (make-rule "/new" :method '(:ANY))
                   :POST "/new")
+      "ANY")
+
+  (ok (match-rule (make-rule "/new" :method '(:ANY))
+                  :POST "/new/")
       "ANY"))
 
 (subtest "with named parameters"

@@ -93,29 +93,32 @@
   (check-type rule rule)
   (check-type method keyword)
   (check-type url-string string)
-  (when (match-method-p rule method :allow-head allow-head)
-    (multiple-value-bind (matchp values)
-        (ppcre:scan-to-strings (rule-regex rule) url-string)
-      (when matchp
-        (values matchp
-                (if (regex-rule-p rule)
-                    `(:captures ,(coerce values 'list))
-                    (loop for key in (rule-param-keys rule)
-                          for val across values
-                          if (eq key :splat)
-                            collect val into splat
-                          else if val
-                            append (list key val) into result
-                          finally
-                             (return (if splat
-                                         `(:splat ,splat ,@result)
-                                         result)))))))))
+  (let ((url (if (> (length url-string) 1)
+		 (string-right-trim "/" url-string)
+		 url-string)))
+    (when (match-method-p rule method :allow-head allow-head)
+      (multiple-value-bind (matchp values)
+	  (ppcre:scan-to-strings (rule-regex rule) url)
+	(when matchp
+	  (values matchp
+		  (if (regex-rule-p rule)
+		      `(:captures ,(coerce values 'list))
+		      (loop for key in (rule-param-keys rule)
+			 for val across values
+			 if (eq key :splat)
+			 collect val into splat
+			 else if val
+			 append (list key val) into result
+			 finally
+			   (return (if splat
+				       `(:splat ,splat ,@result)
+				       result))))))))))
 
 (defun equal-rule (rule1 rule2)
   (and (let ((rule2-methods (rule-methods rule2)))
-         (every (lambda (rule)
-                  (ms-member-p rule2-methods rule))
-                (map-set-index (rule-methods rule1))))
+	 (every (lambda (rule)
+		  (ms-member-p rule2-methods rule))
+		(map-set-index (rule-methods rule1))))
        (string= (rule-url rule1) (rule-url rule2))))
 
 (defgeneric rule-url-for (rule params)
