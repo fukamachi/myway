@@ -14,6 +14,7 @@
   (:import-from :map-set
                 :map-set-index)
   (:export :mapper
+           :clear-routes
            :make-mapper
            :mapper-routes
            :member-route
@@ -24,6 +25,9 @@
 
 (defstruct mapper
   (%routes (make-collector)))
+
+(defun clear-routes (mapper)
+  (setf (mapper-%routes mapper) (make-collector)))
 
 (defun mapper-routes (mapper)
   (funcall (mapper-%routes mapper)))
