@@ -4,6 +4,7 @@
   (:import-from :myway.route
                 :route-rule
                 :route-handler
+                :route-name
                 :equal-route
                 :match-route)
   (:import-from :myway.rule
@@ -18,6 +19,7 @@
            :make-mapper
            :mapper-routes
            :member-route
+           :member-route-by-name
            :add-route
            :next-route
            :dispatch))
@@ -36,6 +38,12 @@
   (member route
           (mapper-routes mapper)
           :test #'equal-route))
+
+(defun member-route-by-name (mapper name)
+  (member name
+          (mapper-routes mapper)
+          :test #'eq
+          :key #'route-name))
 
 (defun add-route (mapper route)
   (let ((routes (member-route mapper route)))
