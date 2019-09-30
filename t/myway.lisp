@@ -21,6 +21,14 @@
 (is (find-route *mapper* "/" :method :POST) nil)
 (is (dispatch *mapper* "/" :method :GET) "Hello, World!")
 
+(connect *mapper* "/"
+         (lambda (params)
+           (declare (ignore params))
+           "Hello, World!")
+         :name :test)
+(ok (find-route-by-name *mapper* :test))
+(is (find-route-by-name *mapper* :test) (find-route *mapper* "/" :name :test))
+
 (connect *mapper* "/post"
          (lambda (params)
            (declare (ignore params))
