@@ -7,6 +7,7 @@
                 :mapper-routes
                 :make-mapper
                 :member-route
+                :member-route-by-name
                 :add-route
                 :next-route
                 :dispatch)
@@ -32,6 +33,7 @@
            :mapper-routes
            :add-route
            :find-route
+           :find-route-by-name
 
            :route
            :route-name
@@ -57,6 +59,10 @@
                  (apply #'make-instance route-class
                         :url url
                         (delete-from-plist args :route-class)))))
+
+(defun find-route-by-name (mapper name)
+  (car
+   (member-route-by-name mapper name)))
 
 (defparameter *env* nil)
 
