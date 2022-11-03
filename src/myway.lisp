@@ -14,6 +14,7 @@
   (:import-from :myway.route
                 :route
                 :route-name
+                :route-rule
                 :route-handler
                 :equal-route
                 :match-route
@@ -37,6 +38,7 @@
 
            :route
            :route-name
+           :route-rule
            :route-handler
            :equal-route
            :match-route
